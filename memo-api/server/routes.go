@@ -6,5 +6,5 @@ import (
 )
 
 func CardRoutes(r *router.Router, c *controller.Card) {
-	r.Router.GET("/card", c.Get)
+	r.Router.GET("/card", c.Get())
 }

@@ -7,9 +7,10 @@ import (
 type Card struct {
 }
 
-func (c *Card) Get(ctx *fasthttp.RequestCtx) fasthttp.RequestHandler {
-	ctx.Response.SetBodyString("Hello World")
-	return func(ctx *fasthttp.RequestCtx) {
-
-	}
+func (c *Card) Get() fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		ctx.Response.SetBodyString(`{"message": "Hello World"}`)
+	})
 }
