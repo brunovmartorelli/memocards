@@ -8,3 +8,7 @@ import (
 func CardRoutes(r *router.Router, c *controller.Card) {
 	r.Router.GET("/card", c.Get())
 }
+
+func DeckRoutes(r *router.Router, d *controller.Deck) {
+	r.Router.GET("/deck", d.Get())
+}

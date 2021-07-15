@@ -12,9 +12,10 @@ type server struct {
 	httpServer *fasthttp.Server
 }
 
-func New(c *controller.Card) *server {
+func New(c *controller.Card, d *controller.Deck) *server {
 	r := router.New()
 	CardRoutes(r, c)
+	DeckRoutes(r, d)
 	h := r.Router.Handler
 	return &server{
 		httpServer: &fasthttp.Server{

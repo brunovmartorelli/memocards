@@ -12,7 +12,8 @@ import (
 
 func main() {
 	cardcontroller := &controller.Card{}
-	httpServer := server.New(cardcontroller)
+	deckcontroller := &controller.Deck{}
+	httpServer := server.New(cardcontroller, deckcontroller)
 	go httpServer.Run()
 
 	shutdown := make(chan os.Signal, 2)
