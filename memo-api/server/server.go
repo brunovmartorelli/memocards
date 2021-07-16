@@ -3,7 +3,6 @@ package server
 import (
 	"log"
 
-	"github.com/brunovmartorelli/memo-api/controller"
 	"github.com/brunovmartorelli/memo-api/server/router"
 	"github.com/valyala/fasthttp"
 )
@@ -12,10 +11,9 @@ type server struct {
 	httpServer *fasthttp.Server
 }
 
-func New(c *controller.Card, d *controller.Deck) *server {
+func New() *server {
 	r := router.New()
-	CardRoutes(r, c)
-	DeckRoutes(r, d)
+	r.Routes()
 	h := r.Router.Handler
 	return &server{
 		httpServer: &fasthttp.Server{

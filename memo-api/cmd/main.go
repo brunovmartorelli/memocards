@@ -6,14 +6,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/brunovmartorelli/memo-api/controller"
 	"github.com/brunovmartorelli/memo-api/server"
 )
 
 func main() {
-	cardcontroller := &controller.Card{}
-	deckcontroller := &controller.Deck{}
-	httpServer := server.New(cardcontroller, deckcontroller)
+	httpServer := server.New()
 	go httpServer.Run()
 
 	shutdown := make(chan os.Signal, 2)
