@@ -5,4 +5,5 @@ go 1.16
 require (
 	github.com/fasthttp/router v1.4.0 // indirect
 	github.com/valyala/fasthttp v1.28.0 // indirect
+	go.mongodb.org/mongo-driver v1.6.0 // indirect
 )

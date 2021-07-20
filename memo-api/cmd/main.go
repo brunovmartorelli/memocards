@@ -1,15 +1,20 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/brunovmartorelli/memo-api/server"
 )
 
 func main() {
+	ctx := context.Background()
+	m := repository.NewMongo()
+	m.Client.Connect(ctx)
 	httpServer := server.New()
 	go httpServer.Run()
 

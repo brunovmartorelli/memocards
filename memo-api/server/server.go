@@ -7,28 +7,33 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-type server struct {
+type server interface {
+	Run()
+	Shutdown() error
+}
+
+type fastserver struct {
 	httpServer *fasthttp.Server
 }
 
-func New() *server {
+func New() server {
 	r := router.New()
 	r.Routes()
 	h := r.Router.Handler
-	return &server{
+	return &fastserver{
 		httpServer: &fasthttp.Server{
 			Handler: h,
 		},
 	}
 }
 
-func (s *server) Run() {
+func (s *fastserver) Run() {
 	log.Println("Starting server")
 	if err := s.httpServer.ListenAndServe(":3030"); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (s *server) Shutdown() error {
+func (s *fastserver) Shutdown() error {
 	return s.httpServer.Shutdown()
 }
