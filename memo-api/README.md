@@ -5,8 +5,7 @@
 - GET /card - Busca de cartas.
 
 ## To do list
-  - Adicionar MongoDB
 - Criar camada de dados (repository)
-- Criar variáveis de ambiente
-- Criar Mongoconfig
+- Organizar a instanciação das camadas
+- Injetar Repositories nos controllers
  

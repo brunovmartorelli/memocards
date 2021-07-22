@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 
+	"github.com/brunovmartorelli/memo-api/config"
 	"github.com/brunovmartorelli/memo-api/server/router"
 	"github.com/valyala/fasthttp"
 )
@@ -14,22 +15,25 @@ type server interface {
 
 type fastserver struct {
 	httpServer *fasthttp.Server
+	cfg        *config.Server
 }
 
-func New() server {
+func New(cfg *config.Server) server {
 	r := router.New()
 	r.Routes()
 	h := r.Router.Handler
+	hs := &fasthttp.Server{
+		Handler: h,
+	}
 	return &fastserver{
-		httpServer: &fasthttp.Server{
-			Handler: h,
-		},
+		httpServer: hs,
+		cfg:        cfg,
 	}
 }
 
 func (s *fastserver) Run() {
 	log.Println("Starting server")
-	if err := s.httpServer.ListenAndServe(":3030"); err != nil {
+	if err := s.httpServer.ListenAndServe(s.cfg.Port); err != nil {
 		log.Fatal(err)
 	}
 }

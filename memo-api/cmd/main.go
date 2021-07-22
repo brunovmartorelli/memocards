@@ -7,15 +7,20 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/brunovmartorelli/memo-api/config"
 	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/brunovmartorelli/memo-api/server"
 )
 
 func main() {
 	ctx := context.Background()
-	m := repository.NewMongo()
+	cfg, _ := config.New()
+
+	m := repository.NewMongo(&cfg.Mongo)
 	m.Client.Connect(ctx)
-	httpServer := server.New()
+	defer m.Disconnect(ctx)
+
+	httpServer := server.New(&cfg.Server)
 	go httpServer.Run()
 
 	shutdown := make(chan os.Signal, 2)
