@@ -18,6 +18,7 @@ func (r *router) deckRoutes(d *controller.Deck) {
 	r.Router.GET("/deck", d.Get())
 }
 
+//TODO: Remover a instânciação dos controllers daqui, receber como parâmetros
 func (r *router) Routes() {
 	cardcontroller := controller.NewCard()
 	deckcontroller := controller.NewDeck()

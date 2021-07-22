@@ -18,3 +18,11 @@ func (d *Deck) Get() fasthttp.RequestHandler {
 		ctx.Response.SetBodyString(`{"message": "Deck"}`)
 	})
 }
+
+func (d *Deck) Post() fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		ctx.Response.SetBodyString(`{"message": "Deck"}`)
+	})
+}
