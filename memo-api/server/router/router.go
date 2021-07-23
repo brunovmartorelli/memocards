@@ -2,34 +2,36 @@ package router
 
 import (
 	"github.com/brunovmartorelli/memo-api/controller"
+	"github.com/brunovmartorelli/memo-api/repository"
+
 	fhr "github.com/fasthttp/router"
 )
 
 type router struct {
 	Router *fhr.Router
+	Mongo  *repository.Mongo
 }
 
-func (r *router) cardRoutes(c *controller.Card) {
+func (r *router) cardRoutes() {
+	repo := repository.NewCard(r.Mongo.Client)
+	c := controller.NewCard(repo)
 	r.Router.GET("/card", c.Get())
 	r.Router.POST("/card", c.Post())
 }
 
-func (r *router) deckRoutes(d *controller.Deck) {
+func (r *router) deckRoutes() {
+	repo := repository.NewDeck(r.Mongo.Client)
+	d := controller.NewDeck(repo)
 	r.Router.GET("/deck", d.Get())
+	r.Router.POST("/deck", d.Post())
 }
 
-//TODO: Remover a instânciação dos controllers daqui, receber como parâmetros
-func (r *router) Routes() {
-	cardcontroller := controller.NewCard()
-	deckcontroller := controller.NewDeck()
-	r.cardRoutes(cardcontroller)
-	r.deckRoutes(deckcontroller)
-
-}
-
-func New() *router {
+func New(m *repository.Mongo) *router {
 	r := &router{
 		Router: fhr.New(),
+		Mongo:  m,
 	}
+	r.cardRoutes()
+	r.deckRoutes()
 	return r
 }

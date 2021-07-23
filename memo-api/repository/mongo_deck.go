@@ -1,32 +1,55 @@
 package repository
 
 import (
+	"context"
+	"log"
+	"time"
+
 	"github.com/brunovmartorelli/memo-api/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type DeckSchema struct {
 	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description"`
-	Cards       []Card             `json:"cards"`
+	Cards       []MongoCard        `json:"cards"`
 	Size        int                `json:"size"`
 }
 
-type Deck struct {
+type MongoDeck struct {
 	Database   string
 	Collection string
+	Client     *mongo.Client
 }
 
-func (d *Deck) Get(ID string) (Deck, error) {
-	return Deck{}, nil
+func NewDeck(c *mongo.Client) DeckRepository {
+	return &MongoDeck{
+		Client:     c,
+		Database:   "memo",
+		Collection: "deck",
+	}
 }
-func (d *Deck) Create(domain.Deck) error {
+
+func (d *MongoDeck) Get(ID string) (DeckSchema, error) {
+	return DeckSchema{}, nil
+}
+func (d *MongoDeck) Create(deck domain.Deck) error {
+	collection := d.Client.Database(d.Database).Collection(d.Collection)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	res, err := collection.InsertOne(ctx, deck)
+	if err != nil {
+		return err
+	}
+	log.Printf("%v", res)
 	return nil
 }
-func (d *Deck) Update(domain.Deck) error {
+func (d *MongoDeck) Update(domain.Deck) error {
 	return nil
 }
-func (d *Deck) Delete(ID string) error {
+func (d *MongoDeck) Delete(ID string) error {
 	return nil
 }

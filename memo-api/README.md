@@ -5,7 +5,7 @@
 - GET /card - Busca de cartas.
 
 ## To do list
-- Criar camada de dados (repository)
-- Organizar a instanciação das camadas
-- Injetar Repositories nos controllers
+- Validar body do POST /deck
+- Retornar erro 400 caso falhe na validação
+- GET UPDATE DELETE deck
  

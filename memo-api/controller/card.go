@@ -1,14 +1,18 @@
 package controller
 
 import (
+	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/valyala/fasthttp"
 )
 
 type Card struct {
+	repository repository.CardRepository
 }
 
-func NewCard() *Card {
-	return &Card{}
+func NewCard(r repository.CardRepository) *Card {
+	return &Card{
+		repository: r,
+	}
 }
 
 func (c *Card) Get() fasthttp.RequestHandler {
