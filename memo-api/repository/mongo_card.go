@@ -35,6 +35,6 @@ func (d *MongoCard) Create(domain.Card) error {
 func (d *MongoCard) Update(domain.Card) error {
 	return nil
 }
-func (d *MongoCard) Delete(ID string) error {
-	return nil
+func (d *MongoCard) Delete(name string) (int64, error) {
+	return 0, nil
 }

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/brunovmartorelli/memo-api/domain"
@@ -64,6 +65,28 @@ func (d *Deck) Post() fasthttp.RequestHandler {
 
 		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
 		ctx.SetStatusCode(fasthttp.StatusOK)
-		ctx.Response.SetBodyString(`{"message": "Deck Criado com sucesso."}`)
+		ctx.Response.SetBodyString(`{"message": "Deck criado com sucesso."}`)
+	})
+}
+
+func (d *Deck) Delete() fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		name := ctx.UserValue("name").(string)
+		count, err := d.repository.Delete(name)
+		if err != nil {
+			ctx.SetBodyString(err.Error())
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			return
+		}
+
+		if count == 0 {
+			ctx.SetStatusCode(fasthttp.StatusNotFound)
+			ctx.SetBodyString(fmt.Sprintf("%s Not Found.", name))
+			return
+		}
+
+		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		ctx.Response.SetBodyString(`{"message": "Deck deletado com sucesso."}`)
 	})
 }
