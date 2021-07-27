@@ -52,6 +52,14 @@ func (d *Deck) Post() fasthttp.RequestHandler {
 			return
 		}
 
+		_, err := d.repository.GetByName(deck.Name)
+		if err == nil {
+			log.Println(err)
+			ctx.SetStatusCode(fasthttp.StatusConflict)
+			ctx.SetBodyString(fmt.Sprintf("O deck %s já existe.", deck.Name))
+			return
+		}
+
 		domainDeck := domain.Deck{
 			Name:        deck.Name,
 			Description: deck.Description,

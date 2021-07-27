@@ -12,7 +12,8 @@ type CardRepository interface {
 }
 
 type DeckRepository interface {
-	Get(ID string) (DeckSchema, error)
+	Get(ID string) (*DeckSchema, error)
+	GetByName(name string) (*DeckSchema, error)
 	Create(domain.Deck) error
 	Update(domain.Deck) error
 	Delete(name string) (int64, error)

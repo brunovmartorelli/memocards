@@ -33,9 +33,25 @@ func NewDeck(c *mongo.Client) DeckRepository {
 	}
 }
 
-func (d *MongoDeck) Get(ID string) (DeckSchema, error) {
-	return DeckSchema{}, nil
+func (d *MongoDeck) Get(ID string) (*DeckSchema, error) {
+	return &DeckSchema{}, nil
 }
+
+func (d *MongoDeck) GetByName(name string) (*DeckSchema, error) {
+	collection := d.Client.Database(d.Database).Collection(d.Collection)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	res := collection.FindOne(ctx, bson.M{
+		"name": name,
+	})
+	deck := &DeckSchema{}
+	if err := res.Decode(deck); err != nil {
+		return nil, err
+	}
+	return deck, nil
+}
+
 func (d *MongoDeck) Create(deck domain.Deck) error {
 	collection := d.Client.Database(d.Database).Collection(d.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
