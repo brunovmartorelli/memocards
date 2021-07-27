@@ -7,7 +7,13 @@ import (
 	"github.com/brunovmartorelli/memo-api/domain"
 	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/valyala/fasthttp"
+	"gopkg.in/validator.v2"
 )
+
+type PostDeckBody struct {
+	Name        string `validate:"nonzero, max=20"`
+	Description string `validate:"max=40"`
+}
 
 type Deck struct {
 	repository repository.DeckRepository
@@ -29,9 +35,8 @@ func (d *Deck) Get() fasthttp.RequestHandler {
 
 func (d *Deck) Post() fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
-		//TODO: Validate deck body
 		b := ctx.Request.Body()
-		deck := domain.Deck{}
+		deck := PostDeckBody{}
 		if err := json.Unmarshal(b, &deck); err != nil {
 			//FIXME: error handling
 			log.Println(err)
@@ -39,7 +44,19 @@ func (d *Deck) Post() fasthttp.RequestHandler {
 			return
 		}
 
-		if err := d.repository.Create(deck); err != nil {
+		if err := validator.Validate(deck); err != nil {
+			log.Println(err)
+			ctx.SetBodyString(err.Error())
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
+
+		domainDeck := domain.Deck{
+			Name:        deck.Name,
+			Description: deck.Description,
+		}
+
+		if err := d.repository.Create(domainDeck); err != nil {
 			log.Println(err)
 			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 			return
