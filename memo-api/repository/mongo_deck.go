@@ -64,8 +64,24 @@ func (d *MongoDeck) Create(deck domain.Deck) error {
 	log.Printf("%v", res)
 	return nil
 }
-func (d *MongoDeck) Update(domain.Deck) error {
-	return nil
+func (d *MongoDeck) Update(name string, deck domain.Deck) (int64, error) {
+	collection := d.Client.Database(d.Database).Collection(d.Collection)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	filter := bson.M{
+		"name": name,
+	}
+
+	update := bson.M{
+		"$set": deck,
+	}
+
+	res, err := collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return 0, err
+	}
+	return res.ModifiedCount, nil
 }
 func (d *MongoDeck) Delete(name string) (int64, error) {
 	collection := d.Client.Database(d.Database).Collection(d.Collection)

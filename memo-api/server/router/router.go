@@ -25,6 +25,7 @@ func (r *router) deckRoutes() {
 	r.Router.GET("/deck/{name}", d.Get())
 	r.Router.POST("/deck", d.Post())
 	r.Router.DELETE("/deck/{name}", d.Delete())
+	r.Router.PUT("/deck/{name}", d.Update())
 }
 
 func New(m *repository.Mongo) *router {
