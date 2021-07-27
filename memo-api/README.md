@@ -5,5 +5,7 @@
 - GET /card - Busca de cartas.
 
 ## To do list
-- GET UPDATE DELETE deck
+- List decks
+- Get deck by name route
+- GET UPDATE DELETE POST cards
  

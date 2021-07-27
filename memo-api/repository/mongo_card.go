@@ -7,9 +7,10 @@ import (
 )
 
 type CardSchema struct {
-	ID    primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Front string             `json:"front"`
-	Back  string             `json:"back"`
+	ID       primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Front    string             `json:"front"`
+	Back     string             `json:"back"`
+	DeckName string             `json:"deckName"`
 }
 
 type MongoCard struct {
