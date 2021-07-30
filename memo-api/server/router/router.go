@@ -15,8 +15,11 @@ type router struct {
 func (r *router) cardRoutes() {
 	repo := repository.NewCard(r.Mongo.Client)
 	c := controller.NewCard(repo)
-	r.Router.GET("/card", c.Get())
-	r.Router.POST("/card", c.Post())
+	r.Router.GET("/deck/{deckName}/card", c.Get())
+	r.Router.POST("/deck/{deckName}/card", c.Post())
+	r.Router.PUT("/deck/{deckName}/card/{front}", c.Update())
+	r.Router.DELETE("/deck/{deckName}/card/{front}", c.Delete())
+
 }
 
 func (r *router) deckRoutes() {

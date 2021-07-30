@@ -12,7 +12,7 @@ import (
 )
 
 type DeckSchema struct {
-	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	ID          primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description"`
 	Cards       []MongoCard        `json:"cards"`

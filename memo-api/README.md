@@ -7,5 +7,5 @@
 ## To do list
 - List decks
 - Get deck by name route
-- GET UPDATE DELETE POST cards
-- Na hr de criar carta, verificar se o deck existe
+- UPDATE DELETE com o bson no cards
+- Na hr de criar carta, verificar se a carta existe

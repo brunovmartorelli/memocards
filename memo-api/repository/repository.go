@@ -5,9 +5,10 @@ import (
 )
 
 type CardRepository interface {
-	Get(ID string) (CardSchema, error)
-	Create(domain.Card) error
-	Update(domain.Card) error
+	Get(ID string) (*CardSchema, error)
+	GetByFront(string, string) (*CardSchema, error)
+	Create(string, domain.Card) error
+	Update(front string, card domain.Card) (int64, error)
 	Delete(name string) (int64, error)
 }
 

@@ -103,6 +103,7 @@ func (d *Deck) Post() fasthttp.RequestHandler {
 		domainDeck := domain.Deck{
 			Name:        deck.Name,
 			Description: deck.Description,
+			Cards:       &[]domain.Card{},
 		}
 
 		if err := d.repository.Create(domainDeck); err != nil {
