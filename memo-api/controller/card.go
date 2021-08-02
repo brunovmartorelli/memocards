@@ -109,7 +109,7 @@ func (c *Card) Post() fasthttp.RequestHandler {
 		}
 
 		_, geterr := c.repository.GetByFront(card.Front, deckName)
-		if geterr == nil {
+		if geterr != nil {
 			log.Println(err)
 			ctx.SetStatusCode(fasthttp.StatusConflict)
 			ctx.SetBodyString(fmt.Sprintf("A carta %s já existe.", card.Front))
