@@ -108,9 +108,9 @@ func (c *Card) Post() fasthttp.RequestHandler {
 			return
 		}
 
-		_, geterr := c.repository.GetByFront(card.Front, deckName)
-		if geterr != nil {
-			log.Println(err)
+		foundCard, geterr := c.repository.GetByFront(card.Front, deckName)
+		if geterr == nil && foundCard != nil {
+			log.Println(geterr)
 			ctx.SetStatusCode(fasthttp.StatusConflict)
 			ctx.SetBodyString(fmt.Sprintf("A carta %s já existe.", card.Front))
 
@@ -142,9 +142,15 @@ func (c *Card) Delete() fasthttp.RequestHandler {
 			ctx.SetStatusCode(fasthttp.StatusBadRequest)
 			return
 		}
-		log.Println(front)
 
-		count, err := c.repository.Delete(front)
+		deckEncoded := ctx.UserValue("deckName").(string)
+		deckName, err := url.QueryUnescape(deckEncoded)
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
+
+		count, err := c.repository.Delete(front, deckName)
 		if err != nil {
 			ctx.SetBodyString(err.Error())
 			ctx.SetStatusCode(fasthttp.StatusInternalServerError)

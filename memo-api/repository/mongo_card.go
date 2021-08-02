@@ -46,11 +46,11 @@ func (c *MongoCard) GetByFront(front, deckName string) (*CardSchema, error) {
 		},
 	}
 	res := collection.FindOne(ctx, filter)
-	card := []CardSchema{}
+	card := CardSchema{}
 	if err := res.Decode(&card); err != nil {
 		return nil, err
 	}
-	return &card[0], nil
+	return &card, nil
 }
 
 func (c *MongoCard) Get(ID string) (*CardSchema, error) {
@@ -101,13 +101,22 @@ func (c *MongoCard) Update(front string, card domain.Card) (int64, error) {
 	}
 	return res.ModifiedCount, err
 }
-func (c *MongoCard) Delete(front string) (int64, error) {
+func (c *MongoCard) Delete(front, deckName string) (int64, error) {
 	collection := c.Client.Database(c.Database).Collection(c.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	count, err := collection.DeleteOne(ctx, bson.M{
-		"front": front,
-	})
-	return count.DeletedCount, err
+	filter := bson.M{
+		"name": deckName,
+	}
+	update := bson.M{
+		"$pull": bson.M{
+			"cards": bson.M{
+				"front": front,
+			},
+		},
+	}
+
+	count, err := collection.UpdateOne(ctx, filter, update)
+	return count.ModifiedCount, err
 }

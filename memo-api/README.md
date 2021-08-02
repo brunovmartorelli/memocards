@@ -8,7 +8,9 @@
 - List decks
 - Get deck by name route
 - UPDATE DELETE com o bson no cards
-- Na hr de criar carta, verificar se a carta existe
+ 
+  IMPROVEMENTS
+- Criar função para extrair e decodar valores do path
 - Criar middleware para decodar as URLs
 - Criar um error handler
 - Separar casos de uso da camada de controller
