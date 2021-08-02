@@ -8,7 +8,7 @@ type CardRepository interface {
 	Get(ID string) (*CardSchema, error)
 	GetByFront(string, string) (*CardSchema, error)
 	Create(string, domain.Card) error
-	Update(front string, card domain.Card) (int64, error)
+	Update(string, string, domain.Card) (int64, error)
 	Delete(string, string) (int64, error)
 }
 

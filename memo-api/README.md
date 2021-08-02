@@ -7,7 +7,7 @@
 ## To do list
 - List decks
 - Get deck by name route
-- UPDATE DELETE com o bson no cards
+
  
   IMPROVEMENTS
 - Criar função para extrair e decodar valores do path

@@ -82,17 +82,22 @@ func (c *MongoCard) Create(deckName string, card domain.Card) error {
 
 	return nil
 }
-func (c *MongoCard) Update(front string, card domain.Card) (int64, error) {
+func (c *MongoCard) Update(front, deckName string, card domain.Card) (int64, error) {
 	collection := c.Client.Database(c.Database).Collection(c.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	filter := bson.M{
-		"front": front,
+		"name": deckName,
+		"cards": bson.M{
+			"$elemMatch": bson.M{
+				"front": front,
+			},
+		},
 	}
 
 	update := bson.M{
-		"$set": card,
+		"$set": bson.M{"cards.$": card},
 	}
 
 	res, err := collection.UpdateOne(ctx, filter, update)

@@ -43,7 +43,13 @@ func (c *Card) Update() fasthttp.RequestHandler {
 			ctx.SetStatusCode(fasthttp.StatusBadRequest)
 			return
 		}
-		log.Println(front)
+
+		deckEncoded := ctx.UserValue("deckName").(string)
+		deckName, err := url.QueryUnescape(deckEncoded)
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
 
 		b := ctx.Request.Body()
 		card := WriteCardBody{}
@@ -65,7 +71,7 @@ func (c *Card) Update() fasthttp.RequestHandler {
 			Back:  card.Back,
 		}
 
-		count, err := c.repository.Update(front, domainCard)
+		count, err := c.repository.Update(front, deckName, domainCard)
 		if err != nil {
 			log.Println(err)
 			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
