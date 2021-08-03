@@ -15,8 +15,7 @@ type DeckSchema struct {
 	ID          primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description"`
-	Cards       []MongoCard        `json:"cards"`
-	Size        int                `json:"size"`
+	Cards       []CardSchema       `json:"cards"`
 }
 
 type MongoDeck struct {
@@ -33,8 +32,21 @@ func NewDeck(c *mongo.Client) DeckRepository {
 	}
 }
 
-func (d *MongoDeck) Get(ID string) (*DeckSchema, error) {
-	return &DeckSchema{}, nil
+func (d *MongoDeck) Get(deckName string) (*DeckSchema, error) {
+	collection := d.Client.Database(d.Database).Collection(d.Collection)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	filter := bson.M{
+		"name": deckName,
+	}
+	res := collection.FindOne(ctx, filter)
+	deck := DeckSchema{}
+	if err := res.Decode(&deck); err != nil {
+		return nil, err
+	}
+	return &deck, nil
+
 }
 
 func (d *MongoDeck) GetByName(name string) (*DeckSchema, error) {

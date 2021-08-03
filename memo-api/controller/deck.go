@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 
 	"github.com/brunovmartorelli/memo-api/domain"
 	"github.com/brunovmartorelli/memo-api/repository"
@@ -33,9 +34,30 @@ func NewDeck(r repository.DeckRepository) *Deck {
 
 func (d *Deck) Get() fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		deckEncoded := ctx.UserValue("name").(string)
+		deckName, err := url.QueryUnescape(deckEncoded)
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
+
+		deck, geterr := d.repository.Get(deckName)
+		if geterr != nil {
+			ctx.SetStatusCode(fasthttp.StatusNotFound)
+			ctx.SetBodyString(fmt.Sprintf("%s Not Found.", deckName))
+			return
+		}
+
+		body, jerr := json.Marshal(deck)
+		if jerr != nil {
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			ctx.SetBodyString(jerr.Error())
+			return
+		}
+
 		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
 		ctx.SetStatusCode(fasthttp.StatusOK)
-		ctx.Response.SetBodyString(`{"message": "Deck"}`)
+		ctx.SetBodyString(string(body))
 	})
 }
 
