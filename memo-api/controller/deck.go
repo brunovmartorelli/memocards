@@ -32,6 +32,27 @@ func NewDeck(r repository.DeckRepository) *Deck {
 	}
 }
 
+func (d *Deck) List() fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		decks, err := d.repository.List()
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			ctx.SetBodyString(err.Error())
+			return
+		}
+		body, jerr := json.Marshal(decks)
+		if jerr != nil {
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			ctx.SetBodyString(jerr.Error())
+			return
+		}
+
+		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		ctx.SetBodyString(string(body))
+	})
+}
+
 func (d *Deck) Get() fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		deckEncoded := ctx.UserValue("name").(string)

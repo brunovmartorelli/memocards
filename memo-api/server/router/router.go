@@ -25,6 +25,7 @@ func (r *router) cardRoutes() {
 func (r *router) deckRoutes() {
 	repo := repository.NewDeck(r.Mongo.Client)
 	d := controller.NewDeck(repo)
+	r.Router.GET("/deck", d.List())
 	r.Router.GET("/deck/{name}", d.Get())
 	r.Router.POST("/deck", d.Post())
 	r.Router.DELETE("/deck/{name}", d.Delete())

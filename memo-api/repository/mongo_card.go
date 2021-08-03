@@ -7,14 +7,12 @@ import (
 
 	"github.com/brunovmartorelli/memo-api/domain"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type CardSchema struct {
-	ID    primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
-	Front string             `json:"front"`
-	Back  string             `json:"back"`
+	Front string `json:"front"`
+	Back  string `json:"back"`
 }
 
 type MongoCard struct {

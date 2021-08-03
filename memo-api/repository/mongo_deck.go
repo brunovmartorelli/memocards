@@ -32,6 +32,22 @@ func NewDeck(c *mongo.Client) DeckRepository {
 	}
 }
 
+func (d *MongoDeck) List() (*[]DeckSchema, error) {
+	collection := d.Client.Database(d.Database).Collection(d.Collection)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	res, err := collection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	decks := &[]DeckSchema{}
+	if err := res.All(ctx, decks); err != nil {
+		return nil, err
+	}
+	return decks, nil
+}
+
 func (d *MongoDeck) Get(deckName string) (*DeckSchema, error) {
 	collection := d.Client.Database(d.Database).Collection(d.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

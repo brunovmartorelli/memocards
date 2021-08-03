@@ -6,11 +6,10 @@
 
 ## To do list
 - List decks
-- Get deck by name route
 
  
   IMPROVEMENTS
-- Criar função para extrair e decodar valores do path
+- Criar função para extrair e decodar valores do path (QueryUnescape)
 - Criar middleware para decodar as URLs
 - Criar um error handler
 - Separar casos de uso da camada de controller
