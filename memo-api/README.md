@@ -5,7 +5,8 @@
 - GET /card - Busca de cartas.
 
 ## To do list
-- List decks
+- List Decks sem cartas
+- List Cards com deck
 
  
   IMPROVEMENTS
