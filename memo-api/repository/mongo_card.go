@@ -3,11 +3,13 @@ package repository
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/brunovmartorelli/memo-api/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type CardSchema struct {
@@ -50,8 +52,31 @@ func (c *MongoCard) GetByFront(front, deckName string) (*CardSchema, error) {
 	return &card, nil
 }
 
-func (c *MongoCard) Get(ID string) (*CardSchema, error) {
-	return &CardSchema{}, nil
+func (c *MongoCard) List(deckName string) (*[]CardSchema, error) {
+	collection := c.Client.Database(c.Database).Collection(c.Collection)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	filter := bson.M{
+		"name": deckName,
+	}
+
+	options := options.FindOne()
+	options.SetProjection(bson.M{
+		"cards": 1,
+		"_id":   0,
+	})
+
+	res := collection.FindOne(ctx, filter, options)
+
+	deck := &DeckSchema{}
+	if err := res.Decode(deck); err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	log.Println(deck)
+	cards := &deck.Cards
+	return cards, nil
 }
 func (c *MongoCard) Create(deckName string, card domain.Card) error {
 	collection := c.Client.Database(c.Database).Collection(c.Collection)

@@ -27,11 +27,32 @@ func NewCard(r repository.CardRepository) *Card {
 	}
 }
 
-func (c *Card) Get() fasthttp.RequestHandler {
+func (c *Card) List() fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		deckEncoded := ctx.UserValue("deckName").(string)
+		deckName, err := url.QueryUnescape(deckEncoded)
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
+
+		cards, err := c.repository.List(deckName)
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			ctx.SetBodyString(err.Error())
+			return
+		}
+
+		body, jerr := json.Marshal(cards)
+		if jerr != nil {
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			ctx.SetBodyString(jerr.Error())
+			return
+		}
+
 		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
 		ctx.SetStatusCode(fasthttp.StatusOK)
-		ctx.Response.SetBodyString(`{"message": "Card"}`)
+		ctx.SetBodyString(string(body))
 	})
 }
 

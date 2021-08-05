@@ -15,21 +15,21 @@ type router struct {
 func (r *router) cardRoutes() {
 	repo := repository.NewCard(r.Mongo.Client)
 	c := controller.NewCard(repo)
-	r.Router.GET("/deck/{deckName}/card", c.Get())
-	r.Router.POST("/deck/{deckName}/card", c.Post())
-	r.Router.PUT("/deck/{deckName}/card/{front}", c.Update())
-	r.Router.DELETE("/deck/{deckName}/card/{front}", c.Delete())
+	r.Router.GET("/decks/{deckName}/cards", c.List())
+	r.Router.POST("/decks/{deckName}/cards", c.Post())
+	r.Router.PUT("/decks/{deckName}/cards/{front}", c.Update())
+	r.Router.DELETE("/decks/{deckName}/cards/{front}", c.Delete())
 
 }
 
 func (r *router) deckRoutes() {
 	repo := repository.NewDeck(r.Mongo.Client)
 	d := controller.NewDeck(repo)
-	r.Router.GET("/deck", d.List())
-	r.Router.GET("/deck/{name}", d.Get())
-	r.Router.POST("/deck", d.Post())
-	r.Router.DELETE("/deck/{name}", d.Delete())
-	r.Router.PUT("/deck/{name}", d.Update())
+	r.Router.GET("/decks", d.List())
+	r.Router.GET("/decks/{name}", d.Get())
+	r.Router.POST("/decks", d.Post())
+	r.Router.DELETE("/decks/{name}", d.Delete())
+	r.Router.PUT("/decks/{name}", d.Update())
 }
 
 func New(m *repository.Mongo) *router {

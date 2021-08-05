@@ -5,7 +5,7 @@ import (
 )
 
 type CardRepository interface {
-	Get(ID string) (*CardSchema, error)
+	List(deckName string) (*[]CardSchema, error)
 	GetByFront(string, string) (*CardSchema, error)
 	Create(string, domain.Card) error
 	Update(string, string, domain.Card) (int64, error)
