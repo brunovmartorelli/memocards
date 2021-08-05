@@ -14,12 +14,12 @@ import (
 
 type PostDeckBody struct {
 	Name        string `validate:"nonzero, max=20"`
-	Description string `validate:"max=40"`
+	Description string `validate:"max=100"`
 }
 
 type PutDeckBody struct {
-	Name        string `validate:"max=20"`
-	Description string `validate:"max=40"`
+	Name        string `validate:"max=40"`
+	Description string `validate:"max=100"`
 }
 
 type Deck struct {
@@ -34,7 +34,13 @@ func NewDeck(r repository.DeckRepository) *Deck {
 
 func (d *Deck) List() fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
-		decks, err := d.repository.List()
+		qa := ctx.Request.URI().QueryArgs()
+		cards := true
+		if qa.Has("cards") {
+			cards = qa.GetBool("cards")
+		}
+
+		decks, err := d.repository.List(cards)
 		if err != nil {
 			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 			ctx.SetBodyString(err.Error())

@@ -18,5 +18,5 @@ type DeckRepository interface {
 	Create(domain.Deck) error
 	Update(name string, deck domain.Deck) (int64, error)
 	Delete(name string) (int64, error)
-	List() (*[]DeckSchema, error)
+	List(cards bool) (*[]DeckSchema, error)
 }

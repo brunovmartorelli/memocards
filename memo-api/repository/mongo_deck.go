@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type DeckSchema struct {
@@ -32,12 +33,19 @@ func NewDeck(c *mongo.Client) DeckRepository {
 	}
 }
 
-func (d *MongoDeck) List() (*[]DeckSchema, error) {
+func (d *MongoDeck) List(cards bool) (*[]DeckSchema, error) {
 	collection := d.Client.Database(d.Database).Collection(d.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	res, err := collection.Find(ctx, bson.D{})
+	options := options.Find()
+	if !cards {
+		options.SetProjection(bson.M{
+			"cards": 0,
+		})
+	}
+
+	res, err := collection.Find(ctx, bson.D{}, options)
 	if err != nil {
 		return nil, err
 	}
