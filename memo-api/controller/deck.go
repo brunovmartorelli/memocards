@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/brunovmartorelli/memo-api/domain"
+	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/valyala/fasthttp"
 	"gopkg.in/validator.v2"
@@ -106,7 +106,7 @@ func (d *Deck) Update() fasthttp.RequestHandler {
 			return
 		}
 
-		domainDeck := domain.Deck{
+		domainDeck := entities.Deck{
 			Name:        deck.Name,
 			Description: deck.Description,
 		}
@@ -149,10 +149,10 @@ func (d *Deck) Post() fasthttp.RequestHandler {
 			return
 		}
 
-		domainDeck := domain.Deck{
+		domainDeck := entities.Deck{
 			Name:        deck.Name,
 			Description: deck.Description,
-			Cards:       &[]domain.Card{},
+			Cards:       &[]entities.Card{},
 		}
 
 		if err := d.repository.Create(domainDeck); err != nil {

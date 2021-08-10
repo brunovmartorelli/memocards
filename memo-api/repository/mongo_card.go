@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/brunovmartorelli/memo-api/domain"
+	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -15,6 +15,7 @@ import (
 type CardSchema struct {
 	Front string `json:"front"`
 	Back  string `json:"back"`
+	Score int    `json:"score"`
 }
 
 type MongoCard struct {
@@ -78,7 +79,7 @@ func (c *MongoCard) List(deckName string) (*[]CardSchema, error) {
 	cards := &deck.Cards
 	return cards, nil
 }
-func (c *MongoCard) Create(deckName string, card domain.Card) error {
+func (c *MongoCard) Create(deckName string, card entities.Card) error {
 	collection := c.Client.Database(c.Database).Collection(c.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -104,7 +105,7 @@ func (c *MongoCard) Create(deckName string, card domain.Card) error {
 
 	return nil
 }
-func (c *MongoCard) Update(front, deckName string, card domain.Card) (int64, error) {
+func (c *MongoCard) Update(front, deckName string, card entities.Card) (int64, error) {
 	collection := c.Client.Database(c.Database).Collection(c.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

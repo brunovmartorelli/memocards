@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/brunovmartorelli/memo-api/domain"
+	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -88,7 +88,7 @@ func (d *MongoDeck) GetByName(name string) (*DeckSchema, error) {
 	return deck, nil
 }
 
-func (d *MongoDeck) Create(deck domain.Deck) error {
+func (d *MongoDeck) Create(deck entities.Deck) error {
 	collection := d.Client.Database(d.Database).Collection(d.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -100,7 +100,7 @@ func (d *MongoDeck) Create(deck domain.Deck) error {
 	log.Printf("%v", res)
 	return nil
 }
-func (d *MongoDeck) Update(name string, deck domain.Deck) (int64, error) {
+func (d *MongoDeck) Update(name string, deck entities.Deck) (int64, error) {
 	collection := d.Client.Database(d.Database).Collection(d.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

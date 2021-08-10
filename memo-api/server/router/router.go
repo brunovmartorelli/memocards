@@ -19,6 +19,7 @@ func (r *router) cardRoutes() {
 	r.Router.POST("/decks/{deckName}/cards", c.Post())
 	r.Router.PUT("/decks/{deckName}/cards/{front}", c.Update())
 	r.Router.DELETE("/decks/{deckName}/cards/{front}", c.Delete())
+	//r.Router.PATCH("/decks/{deckName}/cards/{front}/score", c.UpdateScore())
 
 }
 

@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/brunovmartorelli/memo-api/domain"
+	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/valyala/fasthttp"
 	"gopkg.in/validator.v2"
@@ -87,7 +87,7 @@ func (c *Card) Update() fasthttp.RequestHandler {
 			return
 		}
 
-		domainCard := domain.Card{
+		domainCard := entities.Card{
 			Front: card.Front,
 			Back:  card.Back,
 		}
@@ -144,7 +144,7 @@ func (c *Card) Post() fasthttp.RequestHandler {
 			return
 		}
 
-		domainCard := domain.Card{
+		domainCard := entities.Card{
 			Front: card.Front,
 			Back:  card.Back,
 		}
