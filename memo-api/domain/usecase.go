@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 )
 
@@ -18,5 +19,13 @@ func (u *UseCase) UpdateCardScore(deckName, front string) (int, error) {
 		return 0, err
 	}
 	newScore := card.Score + 1
+	card.Score = newScore
+
+	ce := entities.Card{
+		Front: card.Front,
+		Back:  card.Back,
+		Score: card.Score,
+	}
+	u.cardRepository.Update(front, deckName, ce)
 	return newScore, nil
 }

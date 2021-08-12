@@ -3,6 +3,7 @@ package entities
 type Card struct {
 	Front string
 	Back  string
+	Score int
 }
 
 type Deck struct {
