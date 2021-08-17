@@ -49,7 +49,7 @@ func TestUseCase_UpdateCardScore(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.u.UpdateCardScore(tt.args.deckName, tt.args.front)
+			got, err := tt.u.UpdateCardScore(tt.args.front, tt.args.deckName)
 			if tt.calls.get != cardRepoMock.GetCounter {
 				t.Errorf("mock GetCounter called = %d, want %d", cardRepoMock.GetCounter, tt.calls.get)
 				return

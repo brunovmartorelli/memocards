@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/brunovmartorelli/memo-api/controller"
+	"github.com/brunovmartorelli/memo-api/domain"
 	"github.com/brunovmartorelli/memo-api/repository"
 
 	fhr "github.com/fasthttp/router"
@@ -14,13 +15,13 @@ type router struct {
 
 func (r *router) cardRoutes() {
 	repo := repository.NewCard(r.Mongo.Client)
-	c := controller.NewCard(repo)
+	usecase := domain.New(repo)
+	c := controller.NewCard(repo, usecase)
 	r.Router.GET("/decks/{deckName}/cards", c.List())
 	r.Router.POST("/decks/{deckName}/cards", c.Post())
 	r.Router.PUT("/decks/{deckName}/cards/{front}", c.Update())
 	r.Router.DELETE("/decks/{deckName}/cards/{front}", c.Delete())
-	//r.Router.PATCH("/decks/{deckName}/cards/{front}/score", c.UpdateScore())
-
+	r.Router.PATCH("/decks/{deckName}/cards/{front}/score", c.UpdateScore())
 }
 
 func (r *router) deckRoutes() {

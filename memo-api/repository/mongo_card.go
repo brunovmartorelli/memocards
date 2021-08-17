@@ -36,7 +36,7 @@ func (c *MongoCard) GetByFront(front, deckName string) (*CardSchema, error) {
 	collection := c.Client.Database(c.Database).Collection(c.Collection)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
+	log.Printf("repo >> %s, %s", front, deckName)
 	filter := bson.M{
 		"name": deckName,
 		"cards": bson.M{
@@ -45,11 +45,14 @@ func (c *MongoCard) GetByFront(front, deckName string) (*CardSchema, error) {
 			},
 		},
 	}
+
 	res := collection.FindOne(ctx, filter)
 	card := CardSchema{}
 	if err := res.Decode(&card); err != nil {
 		return nil, err
 	}
+	// FIXME: Retorno errado
+	log.Println(card)
 	return &card, nil
 }
 
@@ -64,18 +67,16 @@ func (c *MongoCard) List(deckName string) (*[]CardSchema, error) {
 
 	options := options.FindOne()
 	options.SetProjection(bson.M{
-		"cards": 1,
-		"_id":   0,
+		"cards": 1, // Explicitly returning "cards"
+		"_id":   0, // Explicitly excluding "_id"
 	})
 
 	res := collection.FindOne(ctx, filter, options)
 
 	deck := &DeckSchema{}
 	if err := res.Decode(deck); err != nil {
-		log.Println(err)
 		return nil, err
 	}
-	log.Println(deck)
 	cards := &deck.Cards
 	return cards, nil
 }

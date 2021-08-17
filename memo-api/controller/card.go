@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 
+	"github.com/brunovmartorelli/memo-api/domain"
 	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/valyala/fasthttp"
@@ -14,6 +15,7 @@ import (
 
 type Card struct {
 	repository repository.CardRepository
+	usecase    *domain.UseCase
 }
 
 type WriteCardBody struct {
@@ -21,9 +23,10 @@ type WriteCardBody struct {
 	Back  string `validate:"max=100"`
 }
 
-func NewCard(r repository.CardRepository) *Card {
+func NewCard(r repository.CardRepository, u *domain.UseCase) *Card {
 	return &Card{
 		repository: r,
+		usecase:    u,
 	}
 }
 
@@ -193,5 +196,43 @@ func (c *Card) Delete() fasthttp.RequestHandler {
 		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
 		ctx.SetStatusCode(fasthttp.StatusOK)
 		ctx.Response.SetBodyString(`{"message": "Carta deletada com sucesso."}`)
+	})
+}
+
+func (c *Card) UpdateScore() fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		frontEncoded := ctx.UserValue("front").(string)
+		front, ferr := url.QueryUnescape(frontEncoded)
+		if ferr != nil {
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
+
+		deckEncoded := ctx.UserValue("deckName").(string)
+		deckName, derr := url.QueryUnescape(deckEncoded)
+		if derr != nil {
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
+		log.Printf("controller >> %s, %s", front, deckName)
+		newScore, err := c.usecase.UpdateCardScore(front, deckName)
+
+		if err != nil {
+			if e, ok := err.(domain.NotFoundError); ok {
+				ctx.SetBodyString(fmt.Sprintf("Could not find deck %s or card %s: %s", deckName, front, e.Error()))
+				ctx.SetStatusCode(fasthttp.StatusNotFound)
+				return
+			}
+
+			ctx.SetBodyString(fmt.Sprintf("Could not update card %s from deck %s: %s", front, deckName, err.Error()))
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			return
+
+		}
+
+		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		response := fmt.Sprintf(`{"message": "Score atualizado: %d."}`, newScore)
+		ctx.Response.SetBodyString(response)
 	})
 }
