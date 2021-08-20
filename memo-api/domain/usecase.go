@@ -33,3 +33,18 @@ func (u *UseCase) UpdateCardScore(front, deckName string) (int, error) {
 	u.cardRepository.Update(front, deckName, ce)
 	return newScore, nil
 }
+
+/*TODO: Import https://github.com/T-PWK/go-fibonacci
+Buscar usando deckName
+Criar propriedade ReviewedAt no Card
+O metodo vai verificar todas as cartas do deck e filtrar aquelas que:
+- O score é 0
+- O ReviewedAt até hoje tem que ser maior do que o score(fibonacci)
+*/
+func (u *UseCase) FilterCardsToStudy(deckName string) (*entities.Deck, error) {
+
+}
+
+func (u *UseCase) CheckDeckDueCards() {
+
+}
