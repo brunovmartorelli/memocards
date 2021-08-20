@@ -68,7 +68,7 @@ func (d *Deck) Get() fasthttp.RequestHandler {
 			return
 		}
 
-		deck, geterr := d.repository.Get(deckName)
+		deck, geterr := d.repository.GetByName(deckName)
 		if geterr != nil {
 			ctx.SetStatusCode(fasthttp.StatusNotFound)
 			ctx.SetBodyString(fmt.Sprintf("%s Not Found.", deckName))

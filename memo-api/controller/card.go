@@ -214,7 +214,6 @@ func (c *Card) UpdateScore() fasthttp.RequestHandler {
 			ctx.SetStatusCode(fasthttp.StatusBadRequest)
 			return
 		}
-		log.Printf("controller >> %s, %s", front, deckName)
 		newScore, err := c.usecase.UpdateCardScore(front, deckName)
 
 		if err != nil {

@@ -1,8 +1,6 @@
 package domain
 
 import (
-	"log"
-
 	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 )
@@ -16,7 +14,6 @@ func New(cardRepository repository.CardRepository) *UseCase {
 }
 
 func (u *UseCase) UpdateCardScore(front, deckName string) (int, error) {
-	log.Printf("usecase >> %s, %s", front, deckName)
 	card, err := u.cardRepository.GetByFront(front, deckName)
 	if err != nil {
 		return 0, NotFoundError{
