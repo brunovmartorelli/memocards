@@ -12,9 +12,10 @@ import (
 )
 
 type CardSchema struct {
-	Front string `json:"front"`
-	Back  string `json:"back"`
-	Score int    `json:"score"`
+	Front      string    `json:"front"`
+	Back       string    `json:"back"`
+	Score      int       `json:"score"`
+	ReviewedAt time.Time `json:"reviewedAt"`
 }
 
 type MongoCard struct {

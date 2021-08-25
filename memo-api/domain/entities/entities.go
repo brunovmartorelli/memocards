@@ -1,9 +1,12 @@
 package entities
 
+import "time"
+
 type Card struct {
-	Front string
-	Back  string
-	Score int
+	Front      string
+	Back       string
+	Score      int
+	ReviewedAt time.Time
 }
 
 type Deck struct {
