@@ -1,6 +1,8 @@
 package domain
 
 import (
+	"time"
+
 	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 )
@@ -36,13 +38,12 @@ func (u *UseCase) UpdateCardScore(front, deckName string) (int, error) {
 
 /*TODO: Import https://github.com/T-PWK/go-fibonacci
 Buscar usando deckName
-Criar propriedade ReviewedAt no Card
 O metodo vai verificar todas as cartas do deck e filtrar aquelas que:
 - O score é 0
-- O ReviewedAt até hoje tem que ser maior do que o score(fibonacci)
+- O ReviewedAt até hoje tem que ser maior do que a tradução do score(fibonacci)
 */
-func (u *UseCase) FilterCardsToStudy(deckName string) (*entities.Deck, error) {
-
+func (u *UseCase) FilterCardsToStudy(deckName string, today time.Time) (*[]entities.Card, error) {
+	return nil, nil
 }
 
 func (u *UseCase) CheckDeckDueCards() {
