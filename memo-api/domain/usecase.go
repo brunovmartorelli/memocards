@@ -37,14 +37,6 @@ func (u *UseCase) UpdateCardScore(front, deckName string) (int, error) {
 	return newScore, nil
 }
 
-/*TODO: Import https://github.com/T-PWK/go-fibonacci
-Buscar usando deckName
-O metodo vai verificar todas as cartas do deck e filtrar aquelas que:
-- O score é 0
-- O ReviewedAt até hoje tem que ser maior do que a tradução do score(fibonacci)
-Ver a diferença de dias entre a data do ReviewedAt e a data de hoje e o resultado deve ser maior
-do que o fibonacci
-*/
 func (u *UseCase) FilterCardsToStudy(deckName string, today time.Time) (*[]entities.Card, error) {
 	cardSchemas, err := u.cardRepository.List(deckName)
 	if err != nil {
