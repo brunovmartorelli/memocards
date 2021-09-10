@@ -1,8 +1,10 @@
 package domain
 
 import (
+	"math"
 	"time"
 
+	fib "github.com/T-PWK/go-fibonacci"
 	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 )
@@ -40,6 +42,8 @@ Buscar usando deckName
 O metodo vai verificar todas as cartas do deck e filtrar aquelas que:
 - O score é 0
 - O ReviewedAt até hoje tem que ser maior do que a tradução do score(fibonacci)
+Ver a diferença de dias entre a data do ReviewedAt e a data de hoje e o resultado deve ser maior
+do que o fibonacci
 */
 func (u *UseCase) FilterCardsToStudy(deckName string, today time.Time) (*[]entities.Card, error) {
 	cardSchemas, err := u.cardRepository.List(deckName)
@@ -60,7 +64,14 @@ func (u *UseCase) FilterCardsToStudy(deckName string, today time.Time) (*[]entit
 			ReviewedAt: cardSchema.ReviewedAt,
 		}
 
-		cardEntities = append(cardEntities, ce)
+		f := fib.Fibonacci(uint(ce.Score))
+
+		daysSince := uint64(math.Floor(today.Sub(ce.ReviewedAt).Hours() / 24))
+
+		if ce.Score == 0 || daysSince > f {
+			cardEntities = append(cardEntities, ce)
+		}
+
 	}
 
 	return &cardEntities, nil

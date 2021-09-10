@@ -118,26 +118,8 @@ func TestUseCase_FilterCardsToStudy(t *testing.T) {
 				{
 					Front:      "Bodao",
 					Back:       "Dormiu ontem fdp",
-					Score:      3,
+					Score:      2,
 					ReviewedAt: time.Date(2021, time.August, 22, 0, 0, 0, 0, time.Local),
-				},
-				{
-					Front:      "Seila",
-					Back:       "Mano",
-					Score:      5,
-					ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
-				},
-				{
-					Front:      "Irineu",
-					Back:       "VC N SB NI EU",
-					Score:      7,
-					ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
-				},
-				{
-					Front:      "Bathtub",
-					Back:       "Twitch",
-					Score:      10,
-					ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
 				},
 			},
 			wantErr: false,

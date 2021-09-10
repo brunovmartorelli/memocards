@@ -25,7 +25,7 @@ func (c *CardRepositoryMock) List(deckName string) (*[]CardSchema, error) {
 		{
 			Front:      "Bodao",
 			Back:       "Dormiu ontem fdp",
-			Score:      3,
+			Score:      2,
 			ReviewedAt: time.Date(2021, time.August, 22, 0, 0, 0, 0, time.Local),
 		},
 		{
