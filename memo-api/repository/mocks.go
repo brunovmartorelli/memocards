@@ -16,31 +16,31 @@ type CardRepositoryMock struct {
 func (c *CardRepositoryMock) List(deckName string) (*[]CardSchema, error) {
 	c.ListCounter++
 	cards := &[]CardSchema{
-		CardSchema{
+		{
 			Front:      "Pedrao",
 			Back:       "Ta aqui",
 			Score:      0,
 			ReviewedAt: time.Date(2021, time.August, 10, 0, 0, 0, 0, time.Local),
 		},
-		CardSchema{
+		{
 			Front:      "Bodao",
 			Back:       "Dormiu ontem fdp",
 			Score:      3,
 			ReviewedAt: time.Date(2021, time.August, 22, 0, 0, 0, 0, time.Local),
 		},
-		CardSchema{
+		{
 			Front:      "Seila",
 			Back:       "Mano",
 			Score:      5,
 			ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
 		},
-		CardSchema{
+		{
 			Front:      "Irineu",
 			Back:       "VC N SB NI EU",
 			Score:      7,
 			ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
 		},
-		CardSchema{
+		{
 			Front:      "Bathtub",
 			Back:       "Twitch",
 			Score:      10,

@@ -109,17 +109,35 @@ func TestUseCase_FilterCardsToStudy(t *testing.T) {
 				today:    time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
 			},
 			want: &[]entities.Card{
-				entities.Card{
+				{
 					Front:      "Pedrao",
 					Back:       "Ta aqui",
 					Score:      0,
 					ReviewedAt: time.Date(2021, time.August, 10, 0, 0, 0, 0, time.Local),
 				},
-				entities.Card{
+				{
 					Front:      "Bodao",
 					Back:       "Dormiu ontem fdp",
 					Score:      3,
 					ReviewedAt: time.Date(2021, time.August, 22, 0, 0, 0, 0, time.Local),
+				},
+				{
+					Front:      "Seila",
+					Back:       "Mano",
+					Score:      5,
+					ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
+				},
+				{
+					Front:      "Irineu",
+					Back:       "VC N SB NI EU",
+					Score:      7,
+					ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
+				},
+				{
+					Front:      "Bathtub",
+					Back:       "Twitch",
+					Score:      10,
+					ReviewedAt: time.Date(2021, time.August, 24, 0, 0, 0, 0, time.Local),
 				},
 			},
 			wantErr: false,
@@ -146,10 +164,6 @@ func TestUseCase_FilterCardsToStudy(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := tt.u.FilterCardsToStudy(tt.args.deckName, tt.args.today)
-			if tt.calls.get != cardErrorMock.ListCounter {
-				t.Errorf("mock ListCounter called = %d, want %d", cardErrorMock.ListCounter, tt.calls.list)
-				return
-			}
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UseCase.FilterCardsToStudy() error = %v, wantErr %v", err, tt.wantErr)
 				return
