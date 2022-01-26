@@ -1,13 +1,24 @@
+import DeckList from "../components/deckList/deckList"
 import { list } from "./../services/deck.service"
+import { ThemeProvider, withTheme } from '@emotion/react'
+import theme from '@rebass/preset'
+import { Box, Flex, Heading } from "rebass"
 
-function DeckList({decks}) {
-    console.log(decks)
+const Index = ({ decks }) => {
     return (
-        <ul>
-            {decks.map((deck, index) => {
-              return <li key={index}>{deck.name}</li>
-            })}
-        </ul>
+        <ThemeProvider theme={theme}>
+            <Heading
+                fontSize={[7]}
+                color='blue'
+            >
+                <Flex>
+                    <Box>
+                        MEMOCARDS
+                    </Box>
+                </Flex>
+            </Heading>
+            <DeckList decks={decks} />
+        </ThemeProvider>
     )
 }
 
@@ -20,4 +31,4 @@ export async function getStaticProps() {
     }
 }
 
-export default DeckList
+export default withTheme(Index)
