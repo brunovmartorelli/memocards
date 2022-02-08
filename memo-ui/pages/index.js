@@ -11,8 +11,8 @@ const Index = ({ decks }) => {
                 fontSize={[7]}
                 color='blue'
             >
-                <Flex>
-                    <Box>
+                <Flex justifyContent='center'>
+                    <Box px='auto'>
                         MEMOCARDS
                     </Box>
                 </Flex>
