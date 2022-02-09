@@ -1,24 +1,14 @@
 import DeckList from "../components/deckList/deckList"
 import { list } from "./../services/deck.service"
-import { ThemeProvider, withTheme } from '@emotion/react'
-import theme from '@rebass/preset'
-import { Box, Flex, Heading } from "rebass"
+import { withTheme } from '@emotion/react'
+import MemoHeading from "./../components/memoheading/memoheading"
 
 const Index = ({ decks }) => {
     return (
-        <ThemeProvider theme={theme}>
-            <Heading
-                fontSize={[7]}
-                color='blue'
-            >
-                <Flex justifyContent='center'>
-                    <Box px='auto'>
-                        MEMOCARDS
-                    </Box>
-                </Flex>
-            </Heading>
+        <>
+            <MemoHeading title='MEMOCARDS'/>
             <DeckList decks={decks} />
-        </ThemeProvider>
+        </>
     )
 }
 

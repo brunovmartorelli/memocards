@@ -13,7 +13,6 @@ const Deck = ({ name, description }) => {
             <Text
                 fontSize={[3]}
                 fontWeight='bold'
-                color='primary'
                 textAlign='center'
             >
                 {description}

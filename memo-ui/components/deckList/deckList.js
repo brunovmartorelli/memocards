@@ -1,4 +1,5 @@
 import { Flex, Box } from "rebass"
+import theme from "../../theme"
 import Deck from "../deck/deck"
 
 function DeckList({ decks }) {
@@ -8,7 +9,9 @@ function DeckList({ decks }) {
 
             {decks.map((deck, index) => {
                 return (
-                    <Box justifyContent='center'
+                    <Box
+                        color={theme.lightgrey}
+                        justifyContent='center'
                         p={3}
                         width={1 / 2}
                         bg='primary'>
