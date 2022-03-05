@@ -1,59 +1,87 @@
 import { Flex, Box, Button } from "rebass"
-import { Textarea, Input, Label } from "@rebass/forms"
+import { Input, Label } from "@rebass/forms"
 import MemoHeading from "../components/memoheading/memoheading"
 import theme from "../theme"
 import Link from "next/link"
+import { useState } from "react"
+import { create } from "../services/card.service"
 
 function CreateCard() {
-    return  ( 
-    <>
-    <MemoHeading title='Criar Carta' />
+    const [frente, setFrente] = useState("")
+    const [verso, setVerso] = useState("")
+    
+    const onFrenteChange = (e) => {
+        setFrente(e.target.value)
+    }
+    const onVersoChange = (e) => {
+        setVerso(e.target.value)
+    }
+    const post = () => {
+        create(frente, verso)
+    }
+    return (
+        <>
+            <MemoHeading title='Criar Carta' />
 
-<Box
-    color='#CFCFCF'
-    fontFamily='Roboto'
-    as='form'
-    onSubmit={e => e.preventDefault()}
-    py={3}>
-    <Flex justifyContent='center' mx={-2} mb={3}>
-        <Box justifyContent='center' px={2}>
-            <Label
-                fontSize={5}
-                fontWeight='bold'
-                textAlign='center'
-                htmlFor='name'>Frente:</Label>
-        </Box>
-        <Box justifyContent='center' px={2}>
-            <Label
-                fontSize={5}
-                fontWeight='bold'
-                textAlign='center'
-                htmlFor='description'>Verso:</Label>
-        </Box>
-    </Flex>
-    <Flex justifyContent='center' mx={-2} mb={3}>
-        <Box px={2}>
-            <Link href='/'>
-                <Button
-                    style={{cursor: 'pointer'}}
-                    backgroundColor={theme.darkgrey}
-                    fontFamily='Roboto'>
-                    Voltar
-                </Button>
-            </Link>
-        </Box>
-        <Box px={2}>
-            <Button
-                style={{cursor: 'pointer'}}
-                backgroundColor={theme.discordblue}
-                fontFamily='Roboto'>
-                Criar
-            </Button>
-        </Box>
-    </Flex>
+            <Box
+                color='#CFCFCF'
+                fontFamily='Roboto'
+                as='form'
+                onSubmit={e => e.preventDefault()}
+                py={3}>
+                <Flex justifyContent='center' mx={-2} mb={3}>
+                    <Box justifyContent='center' px={2}>
+                        <Label
+                            fontSize={5}
+                            fontWeight='bold'
+                            textAlign='center'
+                            htmlFor='name'>Frente:</Label>
 
-</Box>
-</>
+                        <Input
+                            id='frente'
+                            name='frente'
+                            value={frente}
+                            onChange={onFrenteChange}
+                        />
+                    </Box>
+                    <Box justifyContent='center' px={2}>
+                        <Label
+                            fontSize={5}
+                            fontWeight='bold'
+                            textAlign='center'
+                            htmlFor='description'>Verso:</Label>
+                        <Input
+                            id='verso'
+                            name='verso'
+                            value={verso}
+                            onChange={onVersoChange}
+                        />
+                    </Box>
+                </Flex>
+                <Flex justifyContent='center' mx={-2} mb={3}>
+                    <Box px={2}>
+                        <Link href='/'>
+                            <Button
+                                style={{ cursor: 'pointer' }}
+                                backgroundColor={theme.darkgrey}
+                                fontFamily='Roboto'>
+                                Voltar
+                            </Button>
+                        </Link>
+                    </Box>
+                    <Box px={2}>
+                        <Button
+                            onClick={post}
+                            style={{ cursor: 'pointer' }}
+                            backgroundColor={theme.discordblue}
+                            fontFamily='Roboto'>
+                            Criar
+                        </Button>
+                    </Box>
+                </Flex>
+
+            </Box>
+        </>
 
     )
 }
