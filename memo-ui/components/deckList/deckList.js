@@ -1,4 +1,4 @@
-import { Flex, Box, Link } from "rebass"
+import { Flex, Box, Link, Button } from "rebass"
 import theme from "../../theme"
 import Deck from "../deck/deck"
 
@@ -9,19 +9,49 @@ function DeckList({ decks }) {
 
             {decks.map((deck, index) => {
                 return (
-                    <Link href={`/decks/${deck.name}`}
-                        style={{ 
-                            cursor: 'pointer',
+                    <Flex 
+                        justifyContent="center"
+                        flexDirection="column"
+                        color="#FFF"
+                        style={{
                             border: '1px solid #FFF',
                             margin: '0 10px'
                         }}
-                        color={theme.lightgrey}
-                        justifyContent='center'
-                        p={3}
-                        width={1 / 2}
-                        bg='primary'>
+                        p={10}
+                    >
                         <Deck {...deck} />
-                    </Link>
+                        <Flex>
+                            <Link href={`/decks/${deck.name}`}
+                                color={theme.lightgrey}
+                                justifyContent='center'
+                                p={3}
+                                width={1 / 2}
+                                bg='primary'
+                            >
+                                <Button fontSize={2}
+                                    style={{ cursor: 'pointer' }}
+                                    backgroundColor={theme.darkgrey}
+                                    fontFamily='Roboto'>
+                                    Editar
+                                </Button>
+                            </Link>
+
+                            <Link href={`/decks/${deck.name}/study`}
+                                color={theme.lightgrey}
+                                justifyContent='center'
+                                p={3}
+                                width={1 / 2}
+                                bg='primary'
+                            >
+                                <Button fontSize={2}
+                                    style={{ cursor: 'pointer' }}
+                                    backgroundColor={theme.discordblue}
+                                    fontFamily='Roboto'>
+                                    Estudar
+                                </Button>
+                            </Link>
+                        </Flex>
+                    </Flex>
                 )
             })}
         </Flex>

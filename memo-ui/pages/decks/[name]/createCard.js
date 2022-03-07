@@ -1,12 +1,15 @@
 import { Flex, Box, Button } from "rebass"
 import { Input, Label } from "@rebass/forms"
-import MemoHeading from "../components/memoheading/memoheading"
-import theme from "../theme"
+import MemoHeading from "../../../components/memoheading/memoheading"
+import theme from "../../../theme"
 import Link from "next/link"
 import { useState } from "react"
-import { create } from "../services/card.service"
+import { create } from "../../../services/card.service"
+import { useRouter } from "next/router"
 
 function CreateCard() {
+    const router = useRouter();
+    const { name: deckName } = router.query
     const [frente, setFrente] = useState("")
     const [verso, setVerso] = useState("")
     
@@ -16,8 +19,15 @@ function CreateCard() {
     const onVersoChange = (e) => {
         setVerso(e.target.value)
     }
-    const post = () => {
-        create(frente, verso)
+    const post = async () => {
+       try {
+            await create(frente, verso, deckName);
+       } catch(error) {
+            alert(error)
+            return
+       }
+
+       router.push(`/decks/${deckName}`);
     }
     return (
         <>

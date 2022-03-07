@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"time"
 
+	"github.com/brunovmartorelli/memo-api/domain"
 	"github.com/brunovmartorelli/memo-api/domain/entities"
 	"github.com/brunovmartorelli/memo-api/repository"
 	"github.com/valyala/fasthttp"
@@ -24,11 +26,13 @@ type PutDeckBody struct {
 
 type Deck struct {
 	repository repository.DeckRepository
+	usecase    *domain.UseCase
 }
 
-func NewDeck(r repository.DeckRepository) *Deck {
+func NewDeck(r repository.DeckRepository, u *domain.UseCase) *Deck {
 	return &Deck{
 		repository: r,
+		usecase:    u,
 	}
 }
 
@@ -76,6 +80,37 @@ func (d *Deck) Get() fasthttp.RequestHandler {
 		}
 
 		body, jerr := json.Marshal(deck)
+		if jerr != nil {
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			ctx.SetBodyString(jerr.Error())
+			return
+		}
+
+		ctx.Response.Header.Add("Content-Type", "application/json; charset=UTF-8")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		ctx.SetBodyString(string(body))
+	})
+}
+
+func (d *Deck) GetStudy() fasthttp.RequestHandler {
+	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
+		deckEncoded := ctx.UserValue("name").(string)
+		deckName, err := url.QueryUnescape(deckEncoded)
+		if err != nil {
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		}
+
+		_, geterr := d.repository.GetByName(deckName)
+		if geterr != nil {
+			ctx.SetStatusCode(fasthttp.StatusNotFound)
+			ctx.SetBodyString(fmt.Sprintf("%s Not Found.", deckName))
+			return
+		}
+
+		cards, _ := d.usecase.FilterCardsToStudy(deckName, time.Now())
+
+		body, jerr := json.Marshal(cards)
 		if jerr != nil {
 			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 			ctx.SetBodyString(jerr.Error())
