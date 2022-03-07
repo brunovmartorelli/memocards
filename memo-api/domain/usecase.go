@@ -17,7 +17,7 @@ func New(cardRepository repository.CardRepository) *UseCase {
 	return &UseCase{cardRepository}
 }
 
-func (u *UseCase) UpdateCardScore(front, deckName string) (int, error) {
+func (u *UseCase) UpdateCardScore(front, deckName string, reset bool) (int, error) {
 	card, err := u.cardRepository.GetByFront(front, deckName)
 	if err != nil {
 		return 0, NotFoundError{
@@ -25,13 +25,17 @@ func (u *UseCase) UpdateCardScore(front, deckName string) (int, error) {
 		}
 	}
 
-	newScore := card.Score + 1
+	newScore := 0
+	if !reset {
+		newScore = card.Score + 1
+	}
 	card.Score = newScore
 
 	ce := entities.Card{
-		Front: card.Front,
-		Back:  card.Back,
-		Score: card.Score,
+		Front:      card.Front,
+		Back:       card.Back,
+		Score:      card.Score,
+		ReviewedAt: time.Now(),
 	}
 	u.cardRepository.Update(front, deckName, ce)
 	return newScore, nil

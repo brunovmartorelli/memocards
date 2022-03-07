@@ -214,7 +214,13 @@ func (c *Card) UpdateScore() fasthttp.RequestHandler {
 			ctx.SetStatusCode(fasthttp.StatusBadRequest)
 			return
 		}
-		newScore, err := c.usecase.UpdateCardScore(front, deckName)
+
+		resetData := ctx.QueryArgs().Peek("reset")
+		var reset bool
+		err := json.Unmarshal(resetData, &reset)
+		reset = (err == nil)
+		fmt.Println(reset)
+		newScore, err := c.usecase.UpdateCardScore(front, deckName, reset)
 
 		if err != nil {
 			if e, ok := err.(domain.NotFoundError); ok {

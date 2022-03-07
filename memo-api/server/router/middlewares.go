@@ -9,7 +9,7 @@ func ParsePaths(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 
 		//ctx.Response.Header.Set("Access-Control-Allow-Credentials", "*")
 		//ctx.Response.Header.Set("Access-Control-Allow-Headers", corsAllowHeaders)
-		ctx.Response.Header.Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+		ctx.Response.Header.Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH")
 		ctx.Response.Header.Set("Access-Control-Allow-Origin", "*")
 
 		next(ctx)
