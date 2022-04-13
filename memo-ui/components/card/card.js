@@ -1,6 +1,6 @@
 import { Flex, Text } from "rebass"
 
-const Card = ({front, back, score, ReviewedAt }) => {
+const Card = ({ front, back, score, ReviewedAt }) => {
     return (
         <Flex flexDirection="column">
             <Text fontSize={[5]}
@@ -9,7 +9,10 @@ const Card = ({front, back, score, ReviewedAt }) => {
             <Text fontSize={[5]}
                 fontWeight='bold'
                 textAlign='center'>Back: {back}</Text>
-            
+            <Text fontSize={[5]}
+                fontWeight='bold'
+                textAlign='center'>Score: {score}</Text>
+
         </Flex>
     )
 }

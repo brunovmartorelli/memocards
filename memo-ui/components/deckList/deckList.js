@@ -1,5 +1,6 @@
 import { Flex, Box, Link, Button } from "rebass"
 import { listStudy } from "../../services/card.service"
+import { deleteDeck } from "../../services/deck.service"
 import theme from "../../theme"
 import Deck from "../deck/deck"
 import { useRouter } from "next/router"
@@ -9,13 +10,19 @@ function DeckList({ decks }) {
 
     const onEstudarClick = async (name) => {
         const cards = await listStudy(name)
-        
+
         if (cards) {
             router.push(`/decks/${name}/study`)
         } else {
             alert("Não há mais cartas para estudar no momento.")
         }
     }
+
+    const onDeletarClick = async (name) => {
+        await deleteDeck(name)
+        router.push(`/`)
+    }
+
     return (
         <Flex marginY='30px'>
 
@@ -32,7 +39,7 @@ function DeckList({ decks }) {
                         p={10}
                     >
                         <Deck {...deck} />
-                        <Flex>
+                        <Flex justifyContent='center'> 
                             <Link href={`/decks/${deck.name}`}
                                 color={theme.lightgrey}
                                 justifyContent='center'
@@ -49,6 +56,8 @@ function DeckList({ decks }) {
                             </Link>
 
                             <Button
+                                mr={4}
+                                pl={1}
                                 onClick={() => onEstudarClick(deck.name)}
                                 color={theme.lightgrey}
                                 justifyContent='center'
@@ -60,6 +69,17 @@ function DeckList({ decks }) {
                                 backgroundColor={theme.discordblue}
                                 fontFamily='Roboto'>
                                 Estudar
+                            </Button>
+                            <Button
+                                pl={1}
+                                onClick={() => onDeletarClick(deck.name)}
+                                height={35}
+                                mt={3}
+                                fontSize={2}
+                                style={{ cursor: 'pointer' }}
+                                backgroundColor={theme.red}
+                                fontFamily='Roboto'>
+                                Deletar
                             </Button>
                         </Flex>
                     </Flex>

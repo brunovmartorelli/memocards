@@ -22,7 +22,7 @@ function DeckPage({cards, name}) {
                     </Link>
                 </Box>
             </Flex>
-            <CardList cards={cards} />
+            <CardList cards={cards} deckName={name} />
         </>
     )
 }

@@ -17,3 +17,11 @@ export async function create(name, description) {
         alert(error)
     })
 }
+
+export async function deleteDeck(name) {
+    const res = await fetch(`http://localhost:3030/decks/${name}`, {
+        method: "DELETE",
+    }).catch(error => {
+        alert(error)
+    })
+}

@@ -44,3 +44,11 @@ export async function score(frente, deckName, reset) {
         throw new Error("Falha ao criar a carta")
     }
 }
+
+export async function deleteCard(front, deckName) {
+    const res = await fetch(`http://localhost:3030/decks/${deckName}/cards/${front}`, {
+        method: "DELETE",
+    }).catch(error => {
+        alert(error)
+    })
+}
