@@ -1,6 +1,7 @@
 import { Flex, Text } from "rebass"
 
-const Card = ({ front, back, score, ReviewedAt }) => {
+const Card = ({ front, back, score, reviewedAt }) => {
+    const date = new Date(reviewedAt);
     return (
         <Flex flexDirection="column">
             <Text fontSize={[5]}
@@ -12,7 +13,9 @@ const Card = ({ front, back, score, ReviewedAt }) => {
             <Text fontSize={[5]}
                 fontWeight='bold'
                 textAlign='center'>Score: {score}</Text>
-
+             <Text fontSize={[5]}
+                fontWeight='bold'
+                textAlign='center'>Data:{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
         </Flex>
     )
 }
